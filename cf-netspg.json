@@ -4,7 +4,7 @@
 
 "Mappings": {
   "EC2RegionMap": {
-   "us-west-2": {"craigami": "ami-1e299d7e"}
+   "us-west-2": {"craigami": "ami-07cf1167"}
   }
 },
 "Parameters" : {
