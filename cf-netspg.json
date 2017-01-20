@@ -1,0 +1,79 @@
+{
+"AWSTemplateFormatVersion": "2010-09-09",
+"Description": "",
+
+"Mappings": {
+  "EC2RegionMap": {
+   "us-west-2": {"craigami": "ami-1e299d7e"}
+  }
+},
+"Parameters" : {
+ "instancetype" : {
+  "Type" : "String"
+ }
+},
+"Resources": {
+  "SecurityGroup": {
+   "Type": "AWS::EC2::SecurityGroup",
+   "Properties": {
+    "GroupDescription": "netspg",
+    "SecurityGroupIngress": [
+    {
+     "CidrIp": "0.0.0.0/0",
+     "FromPort": 22,
+     "IpProtocol": "tcp",
+     "ToPort": 22
+    },
+    {
+     "CidrIp": "0.0.0.0/0",
+     "FromPort": 5432,
+     "IpProtocol": "tcp",
+     "ToPort": 5432
+    }
+    ]
+   }
+  },
+  "Server": {
+   "Type": "AWS::EC2::Instance",
+   "Properties": {
+    "Tags" : [
+    {
+     "Key":"Name",
+     "Value":"netspg"
+    },
+    {
+     "Key":"Project",
+     "Value":"nets-dev"
+    }
+    ],
+    "ImageId": {
+     "Fn::FindInMap": [
+      "EC2RegionMap", {
+       "Ref": "AWS::Region"
+      },
+      "craigami"
+     ]
+    },
+    "InstanceType": {"Ref" : "instancetype"},
+    "KeyName":  "craigradiantblueoregon" ,
+    "SecurityGroupIds": [{
+       "Ref": "SecurityGroup"
+     }],
+    "UserData": {"Fn::Base64": {"Fn::Join": ["",
+     [
+"#!/bin/bash -ex\n",
+"yum install git -y\n",
+"sudo -u ec2-user bash -c 'cd /home/ec2-user; git clone https://github.com/craigwongva/netspg.git > /tmp/u01 2>&1 '\n",
+"sudo -u ec2-user bash -c 'cd /home/ec2-user/netspg; ./userdata-grails > /tmp/u02 2>&1'\n"
+     ]
+    ]}}
+   }
+  }
+},
+"Outputs" : {
+  "InstanceID" : {
+    "Description": "The Instance ID",  
+    "Value" : { "Fn::GetAtt" : [ "Server" , "PublicIp" ] }
+  }
+}
+}
