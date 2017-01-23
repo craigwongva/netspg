@@ -16,3 +16,16 @@ create database netsdb owner nets;
 
 exit
 ```
+
+### About the Grails code
+The Grails code was originally intended to be used to validate the database connection.
+
+It is Grails 2.4 attempting to Postgres 9.5. 
+
+That particular combination failed consistently with "No suitable driver found for jdbc:postgresql". 
+
+The Postgres connection did succeed:
+1. via pgAdmin
+2. via Grails DataSource.groovy
+
+The failing code is not saved in this repo since it contained connection passwords.
