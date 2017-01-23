@@ -16,10 +16,10 @@
   "SecurityGroup": {
    "Type": "AWS::EC2::SecurityGroup",
    "Properties": {
-    "GroupDescription": "netspg",
+    "GroupDescription": "netspg2",
     "SecurityGroupIngress": [
     {
-     "CidrIp": "0.0.0.0/0",
+     "CidrIp": "207.106.237.97/32",
      "FromPort": 22,
      "IpProtocol": "tcp",
      "ToPort": 22
@@ -55,7 +55,7 @@
      ]
     },
     "InstanceType": {"Ref" : "instancetype"},
-    "KeyName":  "craigradiantblueoregon" ,
+    "KeyName":  "netspg" ,
     "SecurityGroupIds": [{
        "Ref": "SecurityGroup"
      }],
